@@ -121,6 +121,12 @@ Run the Nextcloud docker
 docker-compose -f docker-compose.yaml up -d
 ````
 
+### Access to your server 
+
+You can access to your server on the adress 
+````
+https://ip.address.of.tailscale.ip.adress:8080
+````
 
 
 
