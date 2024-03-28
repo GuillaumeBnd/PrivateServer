@@ -83,5 +83,46 @@ Copy the UUID of your storage device and add it at the end of the '/etc/fstab' f
 sudo nano /etc/fstab
 PARTUUID=<-your-UUID-> /mnt/external-drive ext4 defaults 0 0
 ````
+### Run the Tailscale docker
+
+Install Tailscale on your raspberry pi :
+````
+curl -fsSL https://tailscale.com/install.sh | sh
+````
+
+Connects your device to Tailscale, and authenticates if needed : 
+````
+sudo reboot 
+sudo tailscale up
+````
+
+Run your Tailscale docker : 
+````
+docker-compose -f docker-compose-tailscale.yaml up -d
+````
+
+Check your status with : 
+````
+tailscale status
+````
+
+Run the following command, it lets you share a local service securely within your tailnet. --bg is for backgroung.
+(11000 is the port set to be used by Apache, cf docker-compose of nextcloud) 
+
+````
+tailscale serve --bg 11000
+````
+
+### Run the Nextcloud AIO docker command 
+
+
+Run the Nextcloud docker 
+````
+docker-compose -f docker-compose.yaml up -d
+````
+
+
+
+
 
 
