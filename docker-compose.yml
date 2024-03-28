@@ -1,0 +1,29 @@
+version: "3.8"
+
+volumes:
+  nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer
+
+services:
+  nextcloud:
+    image: nextcloud/all-in-one:latest 
+    restart: always
+    container_name: nextcloud-aio-mastercontainer
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 8080:8080
+    environment:
+      - APACHE_PORT=11000
+      - APACHE_IP_BINDING=0.0.0.0
+      - NEXTCLOUD_DATADIR=/mnt/external-drive/disk1/ncdata
+      - NEXTCLOUD_MOUNT=/mnt/
+      - NEXTCLOUD_STARTUP_APPS=twofactor_totp tasks calendar contacts notes
+      - NEXTCLOUD_ADDITIONAL_APKS=imagemagick
+      - NEXTCLOUD_ADDITIONAL_PHP_EXTENSIONS=imagick
+      - NEXTCLOUD_MEMORY_LIMIT=2048M
+      - WATCHTOWER_DOCKER_SOCKET_PATH=$XDG_RUNTIME_DIR/docker.sock 
+    extra_hosts:
+      - "raspberrypi.koala-sun.ts.net:100.79.129.62"
+
