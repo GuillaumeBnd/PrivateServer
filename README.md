@@ -34,19 +34,54 @@ sudo apt install docker docker-compose
 
 ### Mount the Hard Drives
 
+Before you can mount your external storage medium, you need to create a partition and format it. 
+
 Find the location of the disks :
 ````
 sudo fdisk -l
 ````
+They should be at the bottom of the list, at the very bottom there should be a table if the external device already has partitions.
+in either way, run : 
+````
+sudo gdisk /dev/sda
+````
+If partitions are present enter 'd' as command to delete old partitions. When it asks for command again press 'w' to saves the changes, then re-enter the previous command line to create new partitions.
+
+If no partitions are present you can enter 'n' after it asked for command in order to create a new partition. 
+Keep pressing enter to set the default parameters. 
+When it asks for command again press 'w' to saves the changes.
+
+Then enter this command to format the newly created partition so that the operating system can write data to the disk : 
+
+````
+sudo mkfs.ext4 /dev/sda1
+````
 
 Mount them to a newly created folder :
 ````
-sudo mkdir /mtn/external
-sudo mount /dev/sda1 /mnt/external
+sudo mkdir /mnt/external-drive/disk1
+sudo mount /dev/sda1 /mnt/external-drive/disk1
 ````
 Make sure to replace the name of the folder by yours. 
 
+If you want to unmount use : 
+
+````
+sudo umount /dev/sda1
+````
+
 Be aware that this mount is not permanent and need to be redone every time the Raspberry Pi is rebooted. 
-To do an auto-mount of the external Hard drives follow this tutorial : https://www.linuxbabe.com/desktop-linux/how-to-automount-file-systems-on-linux
+To do an auto-mount of the external Hard drives follow this tutorial : https://www.linuxbabe.com/desktop-linux/how-to-automount-file-systems-on-linux.
+
+Or, run this command : 
+
+````
+blkid
+````
+Copy the UUID of your storage device and add it at the end of the '/etc/fstab' file :
+````
+sudo nano /etc/fstab
+PARTUUID=<-your-UUID-> /mnt/external-drive ext4 defaults 0 0
+````
 
 
